@@ -3,7 +3,7 @@ bookmarklets
 
 my bookmarklets
 
-<a href="javscript:alert(1)">sadasdasdasd</a>
+[sadasdasdasd](javscript:alert(1))
 <script language="text/javascript">
 alert(1);
 </script>
