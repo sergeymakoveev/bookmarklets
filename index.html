@@ -45,7 +45,7 @@
 
     function BookMarkletSubmit(form){
         BookMarklet({ name: $(form).find('.bm.name').val(),
-                      code: $(form).find('.bm.editor').data('editor').getValue() });
+                      code: $(form).find('.bm.editor').val() /*.data('editor').getValue()*/ });
         return false;
     }
 
@@ -55,10 +55,10 @@
         $('.bm.form')
             .find('> .bm.submit')
                 .click(function(){BookMarkletSubmit(this.form)})
-                .end()
-             .find('> .bm.editor')
-                .each(function(){ $(this).data({ 'editor':CodeMirror.fromTextArea( this, {lineNumbers:true, mode:'javascript'} )}) })
                 .end();
+//             .find('> .bm.editor')
+//                .each(function(){ $(this).data({ 'editor':CodeMirror.fromTextArea( this, {lineNumbers:true, mode:'javascript'} )}) })
+//                .end();
 
         for(var i in BookMarklets)
             BookMarklet({name:i, code:BookMarklets[i].toString()});
