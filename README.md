@@ -1,9 +1,4 @@
 bookmarklets
 ============
 
-my bookmarklets
-
-[sadasdasdasd]("javscript:alert(1)")
-<script language="text/javascript">
-alert(1);
-</script>
+[Go to project's page](http://sergeymakoveev.github.com/bookmarklets/)
