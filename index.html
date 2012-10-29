@@ -7,45 +7,67 @@
     <meta name="description" content="Bookmarklets : my bookmarklets" />
 
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/custom.css">
     <title>Bookmarklets</title>
+
+    <link  href="http://codemirror.net/lib/codemirror.css" rel="stylesheet" />
+    <script src="http://codemirror.net/lib/codemirror.js"></script>
+    <script src="http://codemirror.net/mode/javascript/javascript.js"></script>
 
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">
-        google.load("jquery", "1");
-        //google.load("jqueryui", "1");
-        //google.load("swfobject", "1");
-
-        var BookMarklets = {
-            FillPassword: function (digital){
-                var h=location.host.toLowerCase()
-                                   .replace(/.*?([^.]*\.[^.]*)$/, '$1')
-                                   .split(''),
-                    p=prompt('Master password')
-                        .split('')
-                        .map( function(e,i,p){ return digital?(((parseInt(e.charCodeAt(0),this.host[i])%(122-48))+48)+'').replace(/([0-9])\1+/g, function(nn,n){return n*nn.length}):
-                                                              String.fromCharCode((parseInt(e.charCodeAt(0),this.host[i])%(122-48))+48) },
-                             { host:h.map(function(e,i){return e.charCodeAt(0)+h[(h.length*e.charCodeAt(0))%h.length].charCodeAt(0)})
-                                    .join('')
-                                    .match(/(.{1,2})/g)
-                                    .map(function(e){return (e%26)+10}) } )
-                        .join(''),
-                    msg="Password : "+p;
-                try{ [].slice.call(document.getElementsByTagName('input'))
-                       .forEach(function(i){ if( i.type.toLowerCase()=="password")
-                                               { i.value=p; msg+="\n'"+(i.name||'undefined')+"' : "+i.value; } });
-                   }catch(e){};
-                prompt(msg, p);
-            }
+(function(){
+    var BookMarklets = {
+            decodeURIComponent: function(){alert(decodeURIComponent(prompt('Enter encoded string for decode:')))},
+            encodeURIComponent: function(){alert(encodeURIComponent(prompt('Enter string for encode:')))}
         };
 
-        $( function($) {
-            var $content = $('#main_content');
-            for(var i in BookMarklets)
-                $('<a class="bookmarklet"/>')
-                    .attr({href:'javascript:alert(1)'})
-                    .appendTo($content);
-        })
-</script>
+    function BookMarklet(source){
+
+        $.ajax({
+            type    :'POST',
+            dataType:'json',
+            url     :'http://closure-compiler.appspot.com/compile',
+            data    :{ js_code:'('+source.code+')();',
+                       compilation_level:'WHITESPACE_ONLY',
+                       output_format:'json',
+                       output_info:'compiled_code' },
+            success:function(result){
+                if(result.compiledCode)
+                    $('<a class="bm bookmarklet"/>')
+                        .html(source.name)
+                        .attr({ href:'javascript:'+encodeURIComponent(result.compiledCode) })
+                        .appendTo($('#main_content'));
+            }
+        });
+
+    };
+
+    function BookMarkletSubmit(form){
+        BookMarklet({ name: $(form).find('.bm.name').val(),
+                      code: $(form).find('.bm.editor').data('editor').getValue() });
+        return false;
+    }
+
+    google.load("jquery", "1");
+    google.setOnLoadCallback(function(){jQuery(function($) {
+
+        $('.bm.form')
+            .find('> .bm.submit')
+                .click(function(){BookMarkletSubmit(this.form)})
+                .end()
+             .find('> .bm.editor')
+                .each(function(){ $(this).data({ 'editor':CodeMirror.fromTextArea( this, {lineNumbers:true, mode:'javascript'} )}) })
+                .end();
+
+        for(var i in BookMarklets)
+            BookMarklet({name:i, code:BookMarklets[i].toString()});
+
+    });});
+
+})();
+
+    </script>
   </head>
 
   <body>
@@ -68,6 +90,15 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner"></section>
+      <hr>
+      <div style="text-align:center;">
+          <form class='bm form' style="display:inline-block; width: 80%; text-align:left"
+                onsubmit="return false;">
+            <input    class='bm name' type='text' />
+            <textarea class='bm editor' style="display:block;width:100%;height:10em;"></textarea>
+            <input    class="bm submit" type='button' value='Make bookmark' />
+          </form>
+      </div>
     </div>
 
     <!-- FOOTER  -->
