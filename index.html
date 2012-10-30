@@ -52,7 +52,7 @@
 
     function BookMarkletSubmit(form){
         BookMarklet({ name: $(form).find('.bm.name').val(),
-                      code: $(form).find('.bm.editor').val() /*.data('editor').getValue()*/ });
+                      code: $(form).find('.bm.editor.code').val() /*.data('editor').getValue()*/ });
         return false;
     }
 
@@ -63,7 +63,7 @@
             .find('> .bm.submit')
                 .click(function(){BookMarkletSubmit(this.form)})
                 .end();
-//             .find('> .bm.editor')
+//             .find('> .bm.editor.code')
 //                .each(function(){ $(this).data({ 'editor':CodeMirror.fromTextArea( this, {lineNumbers:true, mode:'javascript'} )}) })
 //                .end();
 
@@ -101,7 +101,10 @@
           <form class='bm form' style="display:inline-block; width: 80%; text-align:left"
                 onsubmit="return false;">
             <input    class='bm name' type='text' />
-            <textarea class='bm editor' style="display:block;width:100%;height:10em;"></textarea>
+            <div class='bm editor wrapper'>
+                <textarea class='bm editor code'></textarea>
+                Visual mode: <input    class="bm editor mode" type='checkbox' />
+            </div>
             <input    class="bm submit" type='button' value='Make bookmark' />
           </form>
       </div>
