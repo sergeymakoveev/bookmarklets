@@ -34,10 +34,17 @@
                        output_info:'compiled_code' },
             success:function(result){
                 if(result.compiledCode)
-                    $('<a class="bm bookmarklet"/>')
-                        .html(source.name)
-                        .attr({ href:'javascript:'+encodeURIComponent(result.compiledCode) })
-                        .appendTo($('#main_content'));
+                    $('<div class="bm bookmarklet"/>').append(
+                        $('<a/>')
+                            .html(source.name)
+                            .attr({ href:'javascript:'+encodeURIComponent(result.compiledCode) }),
+                        $('<input class="bm source" type="text" />')
+                            .val('javascript:'+result.compiledCode)
+                            .focus(function(){$(this).select();}),
+                        $('<input class="bm source" type="text" />')
+                            .val('javascript:'+encodeURIComponent(result.compiledCode))
+                            .focus(function(){$(this).select();})
+                    ).appendTo($('#main_content'));
             }
         });
 

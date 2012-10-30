@@ -8,6 +8,7 @@
 .CodeMirror pre {
     box-shadow: none;
 }
-#main_content .bm.bookmarklet {
+#main_content .bm.source {
     display: block;
+    width: 100%;
 }
