@@ -19,7 +19,8 @@
 (function(){
     var BookMarklets = {
             decodeURIComponent: function(){alert(decodeURIComponent(prompt('Enter encoded string for decode:')))},
-            encodeURIComponent: function(){alert(encodeURIComponent(prompt('Enter string for encode:')))}
+            encodeURIComponent: function(){alert(encodeURIComponent(prompt('Enter string for encode:')))},
+            showHTMLfromJSON:   function(){(function(k){document.body.innerHTML%20=%20JSON.parse(document.body.textContent)[k];})(prompt('Enter%20json-key'))}
         };
 
     function BookMarklet(source){
